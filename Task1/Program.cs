@@ -20,28 +20,45 @@ class Program
                 var dirTime = Directory.GetLastWriteTime(path);
                 var timeSpan = TimeSpan.FromMinutes(30);
                 var dateTime = DateTime.Now - timeSpan;
-                if (dateTime < dirTime) return;
+                if (dateTime > dirTime) return;
                 var dirs = Directory.GetDirectories(path);
                 foreach (var dir in dirs)
                 {
-                    Directory.Delete(dir);
+                    try
+                    {
+                        Directory.Delete(dir, true);
+                    }
+                    catch (IOException e)
+                    {
+                        Console.WriteLine($"Для директории {dir} установлен статус {e.Message}");
+                        throw;
+                    }
                 }
 
                 var files = Directory.GetFiles(path);
                 foreach (var file in files)
                 {
-                    File.Delete(file);
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Для файла {file} установлен статус {e.Message}");
+                        throw;
+                    }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                Console.WriteLine(e.Message);
             }
         }
         else
         {
             Console.WriteLine("Директория не существует");
         }
+
+        Console.ReadKey();
     }
 }
