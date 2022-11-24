@@ -4,7 +4,17 @@ internal class Program
 {
     public static void Main()
     {
-        
+        Console.WriteLine("Укажите полный путь до директории");
+        var path = Console.ReadLine();
+        DirInspection(path!);
+    }
+    static void DirInspection(string path)
+    {
+        if(!Directory.Exists(path))return;
+        var d = new DirectoryInfo(path);
+        DirSize(d);
+        DeleteDir(path);
+        DirSize(d);
     }
     /// <summary>
     /// Расчёт объёма директории
@@ -36,45 +46,41 @@ internal class Program
         }
         return size;  
     }
-
     /// <summary>
     /// Очистка директории
     /// </summary>
     /// <param name="path">Путь к директории</param>
-    private static void GetCatalogs(string path)
+    private static void DeleteDir(string path)
     {
-        if (Directory.Exists(path))
-        {
-            //Список подпапок
-            var dirs = Directory.GetDirectories(path);
-            foreach (var dir in dirs)
-                try
-                {
-                    Directory.Delete(dir, true);
-                }
-                catch (IOException e)
-                {
-                    Console.WriteLine($"Для директории {dir} установлен статус {e.Message}");
-                    throw;
-                }
-            //Список файлов
-            var files = Directory.GetFiles(path);
-            foreach (var file in files)
-                try
-                {
-                    File.Delete(file);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Для файла {file} установлен статус {e.Message}");
-                    throw;
-                }
-        }
-        else
-        {
-            Console.WriteLine("Директория не существует");
-        }
+        //Список под папок
+        var dirs = Directory.GetDirectories(path);
+        //Удаление под каталогов
+        foreach (var dir in dirs)
+            try
+            {
+                Directory.Delete(dir, true);
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine($"Для директории {dir} установлен статус {e.Message}");
+                throw;
+            }
+
+        //Список файлов
+        var files = Directory.GetFiles(path);
+        //Удаление файлов
+        foreach (var file in files)
+            try
+            {
+                File.Delete(file);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Для файла {file} установлен статус {e.Message}");
+                throw;
+            }
 
         Console.ReadKey();
+        Console.WriteLine("Директория не существует");
     }
 }
