@@ -18,9 +18,10 @@ class Program
             try
             {
                 var dirTime = Directory.GetLastWriteTime(path);
+                Console.WriteLine($"Дата, время создание папки {dirTime}");
                 var timeSpan = TimeSpan.FromMinutes(30);
                 var dateTime = DateTime.Now - timeSpan;
-                if (dateTime > dirTime) return;
+                if (dateTime <= dirTime) return;
                 var dirs = Directory.GetDirectories(path);
                 foreach (var dir in dirs)
                 {
@@ -32,6 +33,10 @@ class Program
                     {
                         Console.WriteLine($"Для директории {dir} установлен статус {e.Message}");
                         throw;
+                    }
+                    finally
+                    {
+                        Console.WriteLine($"Удаление поддиректорий по пути {path} произведена");
                     }
                 }
 
@@ -46,6 +51,10 @@ class Program
                     {
                         Console.WriteLine($"Для файла {file} установлен статус {e.Message}");
                         throw;
+                    }
+                    finally
+                    {
+                        Console.WriteLine($"Удаление файлов по пути {path} произведена");
                     }
                 }
             }
