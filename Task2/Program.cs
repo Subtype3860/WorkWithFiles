@@ -4,7 +4,6 @@ class Program
 {
     public static void Main()
     {
-
         int x;
         do
         {
@@ -14,7 +13,8 @@ class Program
             if (d.Exists)
             {
                 x = 1;
-                Console.WriteLine($"Объём директории {DirSize(d)}");
+                var ds = DirSize(d);
+                Console.WriteLine($"Объём директории {ds}mb");
             }
             else
             {
@@ -22,9 +22,8 @@ class Program
                 Console.WriteLine("Неверно указан путь до директории");
             }
         } while (x == 0);
-
+        Console.ReadKey();
     }
-    
     public static long DirSize(DirectoryInfo d) 
     {    
         long size = 0;
@@ -48,6 +47,6 @@ class Program
             Console.WriteLine(e.Message);
             throw;
         }
-        return size;  
+        return size/1024;  
     }
 }
