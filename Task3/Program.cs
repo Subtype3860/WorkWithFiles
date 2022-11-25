@@ -12,16 +12,19 @@ internal class Program
     {
         if(!Directory.Exists(path))return;
         var d = new DirectoryInfo(path);
-        DirSize(d);
+        var start = DirSize(d);
+        Console.WriteLine($"Исходный размер папки: {start/1024}mb");
         DeleteDir(path);
-        DirSize(d);
+        var end = DirSize(d);
+        Console.WriteLine($"Освобождено: {(start-end)/1024}mb");
+        Console.WriteLine($"Текущий размер папки: {end}mb");
     }
     /// <summary>
     /// Расчёт объёма директории
     /// </summary>
     /// <param name="directoryInfo">Класс DirectoryInfo</param>
     /// <returns></returns>
-    public static long DirSize(DirectoryInfo directoryInfo) 
+    private static long DirSize(DirectoryInfo directoryInfo) 
     {    
         long size = 0;
         try
@@ -42,7 +45,6 @@ internal class Program
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            throw;
         }
         return size;  
     }
@@ -52,6 +54,7 @@ internal class Program
     /// <param name="path">Путь к директории</param>
     private static void DeleteDir(string path)
     {
+        var del = new int[]{};
         //Список под папок
         var dirs = Directory.GetDirectories(path);
         //Удаление под каталогов
@@ -63,7 +66,6 @@ internal class Program
             catch (IOException e)
             {
                 Console.WriteLine($"Для директории {dir} установлен статус {e.Message}");
-                throw;
             }
 
         //Список файлов
@@ -79,8 +81,5 @@ internal class Program
                 Console.WriteLine($"Для файла {file} установлен статус {e.Message}");
                 throw;
             }
-
-        Console.ReadKey();
-        Console.WriteLine("Директория не существует");
     }
 }
